@@ -9,11 +9,15 @@
 #define BUTTON_PIN      BIT1    // P1.1 for S1 button
 #define RED_LED_PIN     BIT0    // P1.0 for Red LED
 #define GREEN_LED_PIN   BIT7    // P4.7 for Green LED
-#define SERVO_0_DEG     350
-#define SERVO_180_DEG   2600
 
-unsigned char authorizedCardDetected = 0;
+// Servo position values (adjust these based on your servo)
+#define SERVO_0_DEG     350     // 0 degree position
+#define SERVO_90_DEG    800    // 90 degree position
+#define SERVO_180_DEG   2600    // 180 degree position
+
 unsigned char serNum[5];
+unsigned char servoState = 0;    // 0=idle, 1=moving to 90, 2=delay at 90, 3=moving to 180, 4=complete
+unsigned int servoDelayTimer = 0;
 
 // Authorized cards (4-byte UIDs)
 const unsigned char authorizedCard1[4] = {0xBB, 0xEC, 0xC8, 0x06};
@@ -38,10 +42,13 @@ int main(void)
     initButton();       // Initialize button
     initLEDs();         // Initialize LEDs
     
+    // Start with servo at 0 degrees
+    setServoAngle(SERVO_0_DEG);
+    
     while(1)
     {
         processRFID();  // Check for RFID cards
-        updateSystem(); // Update servo and LEDs
+        updateSystem(); // Update servo timer and LEDs
     }
     
     return 0;
@@ -85,12 +92,8 @@ void initPWM(void)
 
 void setServoAngle(unsigned int angle)
 {
-    if (angle == 0)
-        TA0CCR2 = SERVO_0_DEG;
-    else
-        TA0CCR2 = SERVO_180_DEG;
-    
-    __delay_cycles(2000000);  // 2000ms for servo to move
+    TA0CCR2 = angle;
+    __delay_cycles(200000);  // 200ms delay for servo to move
 }
 
 void blinkRedLED(int times)
@@ -109,17 +112,17 @@ void blinkRedLED(int times)
 int isAuthorizedCard(void)
 {
     int i;
-
+    
     // Check against authorizedCard1
     for(i = 0; i < 4; i++)
         if(serNum[i] != authorizedCard1[i]) break;
     if(i == 4) return 1;
-
+    
     // Check against authorizedCard2
     for(i = 0; i < 4; i++)
         if(serNum[i] != authorizedCard2[i]) break;
     if(i == 4) return 1;
-
+    
     return 0;
 }
 
@@ -130,59 +133,88 @@ void processRFID(void)
     uint8_t str[MAX_LEN];
     uint8_t i;
     
-    // Check for card
-    status = MFRC522_Request(PICC_REQIDL, str);
-    if (status == MI_OK)
+    // Only check for new cards if servo is idle
+    if(servoState == 0)
     {
-        // Get card serial number
-        status = MFRC522_Anticoll(serNum);
-        
+        // Check for card
+        status = MFRC522_Request(PICC_REQIDL, str);
         if (status == MI_OK)
         {
-            // Check if card is authorized
-            if(isAuthorizedCard())
-            {
-                authorizedCardDetected = 1;
-                P4OUT |= GREEN_LED_PIN;   // Green ON
-                P1OUT &= ~RED_LED_PIN;    // Red OFF
-                
-                // Flash green LED 3 times
-                for(i = 0; i < 3; i++)
-                {
-                    P4OUT ^= GREEN_LED_PIN;
-                    __delay_cycles(100000);
-                    P4OUT ^= GREEN_LED_PIN;
-                    __delay_cycles(100000);
-                }
-            }
-            else
-            {
-                authorizedCardDetected = 0;
-                blinkRedLED(5);  // Unauthorized - blink red 5 times
-                P1OUT |= RED_LED_PIN;
-                P4OUT &= ~GREEN_LED_PIN;
-            }
+            // Get card serial number
+            status = MFRC522_Anticoll(serNum);
             
-            __delay_cycles(1000000);  // 1 second delay
+            if (status == MI_OK)
+            {
+                // Check if card is authorized
+                if(isAuthorizedCard())
+                {
+                    // Valid card detected - start servo sequence
+                    servoState = 1;  // Move to 90 degrees
+                    
+                    // Turn on green LED, turn off red LED
+                    P4OUT |= GREEN_LED_PIN;
+                    P1OUT &= ~RED_LED_PIN;
+                    
+                    // Flash green LED 3 times to indicate access granted
+                    for(i = 0; i < 3; i++)
+                    {
+                        P4OUT ^= GREEN_LED_PIN;
+                        __delay_cycles(100000);
+                        P4OUT ^= GREEN_LED_PIN;
+                        __delay_cycles(100000);
+                    }
+                    
+                    // Keep green LED solid
+                    P4OUT |= GREEN_LED_PIN;
+                    
+                    // Move to 90 degrees immediately
+                    setServoAngle(SERVO_90_DEG);
+                    
+                    // Set timer for 5 second delay AFTER reaching 90 degrees
+                    servoDelayTimer = 500;  // 500 * 10ms = 5 seconds
+                }
+                else
+                {
+                    // Invalid card - blink red LED
+                    blinkRedLED(3);
+                }
+                
+                __delay_cycles(500000);  // 0.5 second delay between reads
+            }
         }
     }
     
     MFRC522_Halt();
 }
 
-// System Update (Button and Servo Control)
+// System Update (Servo Timer Control)
 void updateSystem(void)
 {
-    unsigned char buttonPressed = ((P1IN & BUTTON_PIN) == 0);
-    
-    if(authorizedCardDetected && buttonPressed)
+    // Handle servo sequence
+    if(servoState != 0 && servoDelayTimer > 0)
     {
-        setServoAngle(90);  // Move servo to 180 degrees
-    }
-    else if(authorizedCardDetected && !buttonPressed)
-    {
-        setServoAngle(0);    // Move servo back to 0 degrees
+        servoDelayTimer--;
+        
+        if(servoDelayTimer == 0)
+        {
+            if(servoState == 1)
+            {
+                // After 5 second delay at 90 degrees - move to 180 degrees
+                setServoAngle(SERVO_180_DEG);
+                servoState = 2;
+                servoDelayTimer = 500;  // Wait 5 seconds at 180 degrees
+            }
+            else if(servoState == 2)
+            {
+                // After 5 second delay at 180 degrees - sequence complete
+                servoState = 0;
+                
+                // Turn on red LED, turn off green LED
+                P1OUT |= RED_LED_PIN;
+                P4OUT &= ~GREEN_LED_PIN;
+            }
+        }
     }
     
-    __delay_cycles(10000);  // Small delay
+    __delay_cycles(10000);  // 10ms delay for timing (each loop = ~10ms)
 }

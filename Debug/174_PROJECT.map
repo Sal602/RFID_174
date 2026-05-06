@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker Unix v21.6.1                   
 ******************************************************************************
->> Linked Thu Apr 30 17:53:33 2026
+>> Linked Tue May  5 17:00:32 2026
 
 OUTPUT FILE NAME:   <174_PROJECT.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 00004400
@@ -19,8 +19,8 @@ MEMORY CONFIGURATION
   INFOB                 00001900   00000080  00000000  00000080  RWIX
   INFOA                 00001980   00000080  00000000  00000080  RWIX
   USBRAM                00001c00   00000800  00000000  00000800  RWIX
-  RAM                   00002400   00002000  0000049e  00001b62  RWIX
-  FLASH                 00004400   0000bb80  0000016e  0000ba12  RWIX
+  RAM                   00002400   00002000  000000aa  00001f56  RWIX
+  FLASH                 00004400   0000bb80  00000056  0000bb2a  RWIX
   INT00                 0000ff80   00000002  00000000  00000002  RWIX
   INT01                 0000ff82   00000002  00000000  00000002  RWIX
   INT02                 0000ff84   00000002  00000000  00000002  RWIX
@@ -85,7 +85,7 @@ MEMORY CONFIGURATION
   INT61                 0000fffa   00000002  00000002  00000000  RWIX
   INT62                 0000fffc   00000002  00000002  00000000  RWIX
   RESET                 0000fffe   00000002  00000002  00000000  RWIX
-  FLASH2                00010000   000143f8  00001752  00012ca6  RWIX
+  FLASH2                00010000   000143f8  00000716  00013ce2  RWIX
 
 
 SECTION ALLOCATION MAP
@@ -93,29 +93,11 @@ SECTION ALLOCATION MAP
  output                                  attributes/
 section   page    origin      length       input sections
 --------  ----  ----------  ----------   ----------------
-.data      0    00002400    00000192     UNINITIALIZED
-                  00002400    000000c8     rts430x_lc_rd_eabi.lib : defs.c.obj (.data:_ftable)
-                  000024c8    00000078                            : host_device.c.obj (.data:_device)
-                  00002540    0000003c                            : host_device.c.obj (.data:_stream)
-                  0000257c    00000004                            : exit_gvars.c.obj (.data:__TI_cleanup_ptr)
-                  00002580    00000004                            : exit_gvars.c.obj (.data:__TI_dtors_ptr)
-                  00002584    00000004                            : _lock.c.obj (.data:_lock)
-                  00002588    00000004                            : _lock.c.obj (.data:_unlock)
-                  0000258c    00000002                            : defs.c.obj (.data)
-                  0000258e    00000002                            : exit.c.obj (.data)
-                  00002590    00000002                            : memory.c.obj (.data)
+.bss       0    00002400    00000006     UNINITIALIZED
+                  00002400    00000006     (.common:serNum)
 
-.cio       0    00002592    00000120     UNINITIALIZED
-                  00002592    00000120     rts430x_lc_rd_eabi.lib : trgmsg.c.obj (.cio)
-
-.bss       0    000026b2    000000ac     UNINITIALIZED
-                  000026b2    000000a0     (.common:__TI_tmpnams)
-                  00002752    00000008     (.common:parmbuf)
-                  0000275a    00000004     rts430x_lc_rd_eabi.lib : memory.c.obj (.bss)
-
-.sysmem    0    00002760    000000a0     UNINITIALIZED
-                  00002760    00000008     rts430x_lc_rd_eabi.lib : memory.c.obj (.sysmem)
-                  00002768    00000098     --HOLE--
+.data      0    00002406    00000004     UNINITIALIZED
+                  00002406    00000004     main.obj (.data)
 
 .stack     0    00004360    000000a0     UNINITIALIZED
                   00004360    00000004     rts430x_lc_rd_eabi.lib : boot.c.obj (.stack)
@@ -126,21 +108,21 @@ section   page    origin      length       input sections
                   00004400    0000001c     rts430x_lc_rd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noargs)
                   0000441c    00000008                            : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
-.cinit     0    000044f6    00000078     
-                  000044f6    00000055     (.cinit..data.load) [load image, compression = lzss]
-                  0000454b    00000001     --HOLE-- [fill = 0]
-                  0000454c    0000000c     (__TI_handler_table)
-                  00004558    00000006     (.cinit..bss.load) [load image, compression = zero_init]
-                  0000455e    00000010     (__TI_cinit_table)
+.cinit     0    0000442c    0000002a     
+                  0000442c    0000000c     (__TI_handler_table)
+                  00004438    00000007     (.cinit..data.load) [load image, compression = lzss]
+                  0000443f    00000001     --HOLE-- [fill = 0]
+                  00004440    00000006     (.cinit..bss.load) [load image, compression = zero_init]
+                  00004446    00000010     (__TI_cinit_table)
 
 .binit     0    00004400    00000000     
 
 .init_array 
 *          0    00004400    00000000     UNINITIALIZED
 
-.const     0    00004424    000000d2     
-                  00004424    000000ac     main.obj (.const:.string)
-                  000044d0    00000026     rts430x_lc_rd_eabi.lib : _printfi.c.obj (.const:.string)
+.const     0    00004424    00000008     
+                  00004424    00000004     main.obj (.const:.string:authorizedCard1)
+                  00004428    00000004     main.obj (.const:.string:authorizedCard2)
 
 RTC        0    0000ffd2    00000002     
                   0000ffd2    00000002     rts430x_lc_rd_eabi.lib : int41.asm.obj (.int41)
@@ -219,86 +201,39 @@ SYSNMI     0    0000fffc    00000002
 .reset     0    0000fffe    00000002     
                   0000fffe    00000002     rts430x_lc_rd_eabi.lib : boot.c.obj (.reset)
 
-.text      0    00010000    00001752     
+.text      0    00010000    00000716     
                   00010000    0000013e     Mfrc522.obj (.text:MFRC522_ToCard)
-                  0001013e    00000132     rts430x_lc_rd_eabi.lib : _printfi.c.obj (.text:__TI_printfi_minimal:_setfield___TI_printfi_minimal)
-                  00010270    00000112                            : memory.c.obj (.text:aligned_alloc)
-                  00010382    000000f0                            : fputs.c.obj (.text:fputs)
-                  00010472    000000e2                            : memory.c.obj (.text:free)
-                  00010554    000000de                            : setvbuf.c.obj (.text:setvbuf)
-                  00010632    000000dc                            : _printfi.c.obj (.text:__TI_printfi_minimal:__TI_printfi_minimal)
-                  0001070e    000000da                            : _printfi.c.obj (.text:__TI_printfi_minimal:_pproc_diouxp___TI_printfi_minimal)
-                  000107e8    000000a2     main.obj (.text:processRFID)
-                  0001088a    0000009a     rts430x_lc_rd_eabi.lib : hostlseek.c.obj (.text:HOSTlseek)
-                  00010924    00000090     Mfrc522.obj (.text:MFRC522_Init)
-                  000109b4    00000090     rts430x_lc_rd_eabi.lib : fputc.c.obj (.text:fputc)
-                  00010a44    0000007e                            : _io_perm.c.obj (.text:__TI_wrt_ok)
-                  00010ac2    00000076                            : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
-                  00010b38    00000074                            : hostrename.c.obj (.text:HOSTrename)
-                  00010bac    00000074                            : fclose.c.obj (.text:__TI_closefile)
-                  00010c20    00000074                            : memory.c.obj (.text:split)
-                  00010c94    00000070                            : hostopen.c.obj (.text:HOSTopen)
-                  00010d04    0000006e     Mfrc522.obj (.text:MFRC522_CalulateCRC)
-                  00010d72    0000006c     rts430x_lc_rd_eabi.lib : hostwrite.c.obj (.text:HOSTwrite)
-                  00010dde    0000006a                            : hostread.c.obj (.text:HOSTread)
-                  00010e48    0000006a                            : fseek.c.obj (.text:fseeko)
-                  00010eb2    00000064     Mfrc522.obj (.text:MFRC522_Anticoll)
-                  00010f16    00000064     rts430x_lc_rd_eabi.lib : fflush.c.obj (.text:__TI_doflush)
-                  00010f7a    0000005a                            : close.c.obj (.text:close)
-                  00010fd4    0000005a                            : getdevice.c.obj (.text:getdevice)
-                  0001102e    00000054                            : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
-                  00011082    0000004e                            : hostclose.c.obj (.text:HOSTclose)
-                  000110d0    0000004a                            : exit.c.obj (.text:exit)
-                  0001111a    0000004a                            : printf.c.obj (.text:printf)
-                  00011164    00000048     Mfrc522.obj (.text:MFRC522_Request)
-                  000111ac    00000048     rts430x_lc_rd_eabi.lib : _printfi.c.obj (.text:__TI_printfi_minimal:_pproc_str___TI_printfi_minimal)
-                  000111f4    00000046                            : hostunlink.c.obj (.text:HOSTunlink)
-                  0001123a    00000046     Mfrc522.obj (.text:MFRC522_Halt)
-                  00011280    0000003e     rts430x_lc_rd_eabi.lib : lsl32.asm.obj (.text:l_lsl_const)
-                  000112be    0000003e                            : lseek.c.obj (.text:lseek)
-                  000112fc    0000003c     main.obj (.text:main)
-                  00011338    00000036     rts430x_lc_rd_eabi.lib : fopen.c.obj (.text:__TI_cleanup)
-                  0001136e    00000036                            : trgmsg.c.obj (.text:__TI_writemsg)
-                  000113a4    00000032                            : trgmsg.c.obj (.text:__TI_readmsg)
-                  000113d6    00000032                            : strncpy.c.obj (.text:strncpy)
-                  00011408    00000030                            : unlink.c.obj (.text:unlink)
-                  00011438    0000002e                            : getdevice.c.obj (.text:finddevice)
-                  00011466    0000002c                            : memory.c.obj (.text:free_list_insert)
-                  00011492    0000002a                            : memory.c.obj (.text:free_list_remove)
-                  000114bc    00000028     main.obj (.text:initUART)
-                  000114e4    00000026     rts430x_lc_rd_eabi.lib : memccpy.c.obj (.text:memccpy)
-                  0001150a    00000024                            : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
-                  0001152e    00000022     main.obj (.text:write)
-                  00011550    0000001c     Mfrc522.obj (.text:MFRC522_AntennaOn)
-                  0001156c    0000001c     Mfrc522.obj (.text:MFRC522_ReadReg)
-                  00011588    0000001c     rts430x_lc_rd_eabi.lib : strchr.c.obj (.text:strchr)
-                  000115a4    0000001c                            : strcmp.c.obj (.text:strcmp)
-                  000115c0    0000001a     Mfrc522.obj (.text:MFRC522_WriteReg)
-                  000115da    00000018     rts430x_lc_rd_eabi.lib : mult16_f5hw.asm.obj (.text)
-                  000115f2    00000016     Mfrc522.obj (.text:SPI_ReadByte)
-                  00011608    00000016     Mfrc522.obj (.text:SPI_WriteByte)
-                  0001161e    00000016     rts430x_lc_rd_eabi.lib : memory.c.obj (.text:heap_start)
-                  00011634    00000016     main.obj (.text:initLEDs)
-                  0001164a    00000016     rts430x_lc_rd_eabi.lib : memchr.c.obj (.text:memchr)
-                  00011660    00000016                            : memset.c.obj (.text:memset)
-                  00011676    00000016                            : div16u.asm.obj (.text)
-                  0001168c    00000014     main.obj (.text:initSystem)
-                  000116a0    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
-                  000116b4    00000012     Mfrc522.obj (.text:MFRC522_ClearBitMask)
-                  000116c6    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
-                  000116d8    00000012     main.obj (.text:sendString)
-                  000116ea    00000012     rts430x_lc_rd_eabi.lib : strcpy.c.obj (.text:strcpy)
-                  000116fc    00000010     Mfrc522.obj (.text:MFRC522_SetBitMask)
-                  0001170c    0000000e     rts430x_lc_rd_eabi.lib : strlen.c.obj (.text:strlen)
-                  0001171a    0000000c     Mfrc522.obj (.text:MFRC522_Reset)
-                  00011726    0000000c     main.obj (.text:sendChar)
-                  00011732    00000008     rts430x_lc_rd_eabi.lib : memory.c.obj (.text:malloc)
-                  0001173a    00000006                            : printf.c.obj (.text:_outc)
-                  00011740    00000006                            : exit.c.obj (.text:abort)
-                  00011746    00000004                            : printf.c.obj (.text:_outs)
-                  0001174a    00000004                            : pre_init.c.obj (.text:_system_pre_init)
-                  0001174e    00000002                            : _lock.c.obj (.text:_nop)
-                  00011750    00000002                            : startup.c.obj (.text:_system_post_cinit)
+                  0001013e    000000b0     main.obj (.text:processRFID)
+                  000101ee    00000090     Mfrc522.obj (.text:MFRC522_Init)
+                  0001027e    00000076     rts430x_lc_rd_eabi.lib : copy_decompress_lzss.c.obj (.text:decompress:lzss:__TI_decompress_lzss)
+                  000102f4    0000006e     Mfrc522.obj (.text:MFRC522_CalulateCRC)
+                  00010362    00000064     Mfrc522.obj (.text:MFRC522_Anticoll)
+                  000103c6    00000054     rts430x_lc_rd_eabi.lib : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit_hold_wdt:__TI_auto_init_nobinit_nopinit_hold_wdt)
+                  0001041a    0000004e     main.obj (.text:updateSystem)
+                  00010468    00000048     Mfrc522.obj (.text:MFRC522_Request)
+                  000104b0    00000046     Mfrc522.obj (.text:MFRC522_Halt)
+                  000104f6    00000042     main.obj (.text:blinkRedLED)
+                  00010538    0000003e     main.obj (.text:isAuthorizedCard)
+                  00010576    00000028     main.obj (.text:main)
+                  0001059e    00000024     rts430x_lc_rd_eabi.lib : copy_zero_init.c.obj (.text:decompress:ZI:__TI_zero_init_nomemset:__TI_zero_init_nomemset)
+                  000105c2    00000022     main.obj (.text:initPWM)
+                  000105e4    0000001c     Mfrc522.obj (.text:MFRC522_AntennaOn)
+                  00010600    0000001c     Mfrc522.obj (.text:MFRC522_ReadReg)
+                  0001061c    0000001c     main.obj (.text:setServoAngle)
+                  00010638    0000001a     Mfrc522.obj (.text:MFRC522_WriteReg)
+                  00010652    00000016     Mfrc522.obj (.text:SPI_ReadByte)
+                  00010668    00000016     Mfrc522.obj (.text:SPI_WriteByte)
+                  0001067e    00000016     main.obj (.text:initLEDs)
+                  00010694    00000014     main.obj (.text:initSystem)
+                  000106a8    00000014     rts430x_lc_rd_eabi.lib : memcpy.c.obj (.text:memcpy)
+                  000106bc    00000012     Mfrc522.obj (.text:MFRC522_ClearBitMask)
+                  000106ce    00000012     rts430x_lc_rd_eabi.lib : copy_decompress_none.c.obj (.text:decompress:none:__TI_decompress_none)
+                  000106e0    00000010     Mfrc522.obj (.text:MFRC522_SetBitMask)
+                  000106f0    0000000e     main.obj (.text:initButton)
+                  000106fe    0000000c     Mfrc522.obj (.text:MFRC522_Reset)
+                  0001070a    00000006     rts430x_lc_rd_eabi.lib : exit.c.obj (.text:abort)
+                  00010710    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+                  00010714    00000002                            : startup.c.obj (.text:_system_post_cinit)
 
 MODULE SUMMARY
 
@@ -306,57 +241,19 @@ MODULE SUMMARY
        ------                       ----   -------   -------
     ./
        Mfrc522.obj                  986    0         0      
-       main.obj                     368    172       0      
+       main.obj                     540    8         10     
     +--+----------------------------+------+---------+---------+
-       Total:                       1354   172       0      
+       Total:                       1526   8         10     
                                                             
     /home/jorge/ti/ccs2050/ccs/tools/compiler/ti-cgt-msp430_21.6.1.LTS/lib/rts430x_lc_rd_eabi.lib
-       _printfi.c.obj               816    38        0      
-       memory.c.obj                 732    0         6      
-       trgmsg.c.obj                 104    0         288    
-       defs.c.obj                   0      0         362    
-       fputs.c.obj                  240    0         0      
-       setvbuf.c.obj                222    0         0      
-       host_device.c.obj            0      0         180    
-       hostlseek.c.obj              154    0         0      
-       fputc.c.obj                  144    0         0      
-       getdevice.c.obj              136    0         0      
-       _io_perm.c.obj               126    0         0      
-       hostopen.c.obj               112    0         8      
        copy_decompress_lzss.c.obj   118    0         0      
-       fclose.c.obj                 116    0         0      
-       hostrename.c.obj             116    0         0      
-       hostwrite.c.obj              108    0         0      
-       fseek.c.obj                  106    0         0      
-       hostread.c.obj               106    0         0      
-       fflush.c.obj                 100    0         0      
-       close.c.obj                  90     0         0      
        autoinit.c.obj               84     0         0      
-       printf.c.obj                 84     0         0      
-       exit.c.obj                   80     0         2      
-       hostclose.c.obj              78     0         0      
-       hostunlink.c.obj             70     0         0      
-       lseek.c.obj                  62     0         0      
-       lsl32.asm.obj                62     0         0      
-       fopen.c.obj                  54     0         0      
-       strncpy.c.obj                50     0         0      
-       unlink.c.obj                 48     0         0      
-       memccpy.c.obj                38     0         0      
        copy_zero_init.c.obj         36     0         0      
        boot.c.obj                   28     2         0      
-       strchr.c.obj                 28     0         0      
-       strcmp.c.obj                 28     0         0      
-       mult16_f5hw.asm.obj          24     0         0      
-       div16u.asm.obj               22     0         0      
-       memchr.c.obj                 22     0         0      
-       memset.c.obj                 22     0         0      
        memcpy.c.obj                 20     0         0      
        copy_decompress_none.c.obj   18     0         0      
-       strcpy.c.obj                 18     0         0      
-       strlen.c.obj                 14     0         0      
-       _lock.c.obj                  2      0         8      
-       exit_gvars.c.obj             0      0         8      
        isr_trap.asm.obj             8      0         0      
+       exit.c.obj                   6      0         0      
        pre_init.c.obj               4      0         0      
        int41.asm.obj                0      2         0      
        int42.asm.obj                0      2         0      
@@ -382,25 +279,24 @@ MODULE SUMMARY
        int62.asm.obj                0      2         0      
        startup.c.obj                2      0         0      
     +--+----------------------------+------+---------+---------+
-       Total:                       4652   84        862    
+       Total:                       324    46        0      
                                                             
-       Heap:                        0      0         160    
        Stack:                       0      0         160    
-       Linker Generated:            0      119       0      
+       Linker Generated:            0      41        0      
     +--+----------------------------+------+---------+---------+
-       Grand Total:                 6006   375       1182   
+       Grand Total:                 1850   95        170    
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 0000455e records: 2, size/record: 8, table size: 16
-	.data: load addr=000044f6, load size=00000055 bytes, run addr=00002400, run size=00000192 bytes, compression=lzss
-	.bss: load addr=00004558, load size=00000006 bytes, run addr=000026b2, run size=000000ac bytes, compression=zero_init
+__TI_cinit_table @ 00004446 records: 2, size/record: 8, table size: 16
+	.data: load addr=00004438, load size=00000007 bytes, run addr=00002406, run size=00000004 bytes, compression=lzss
+	.bss: load addr=00004440, load size=00000006 bytes, run addr=00002400, run size=00000006 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 0000454c records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 0000442c records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_zero_init
 	index: 1, handler: __TI_decompress_lzss
 	index: 2, handler: __TI_decompress_none
@@ -492,8 +388,7 @@ address   name
 00000732  ADC12MEM9                              
 00000733  ADC12MEM9_H                            
 00000732  ADC12MEM9_L                            
-00011740  C$$EXIT                                
-000113a0  C$$IO$$                                
+0001070a  C$$EXIT                                
 000008c0  CBCTL0                                 
 000008c1  CBCTL0_H                               
 000008c0  CBCTL0_L                               
@@ -561,13 +456,6 @@ address   name
 00000146  FCTL4                                  
 00000147  FCTL4_H                                
 00000146  FCTL4_L                                
-00011082  HOSTclose                              
-0001088a  HOSTlseek                              
-00010c94  HOSTopen                               
-00010dde  HOSTread                               
-00010b38  HOSTrename                             
-000111f4  HOSTunlink                             
-00010d72  HOSTwrite                              
 000004c4  MAC                                    
 000004da  MAC32H                                 
 000004db  MAC32H_H                               
@@ -586,18 +474,18 @@ address   name
 000004c6  MACS_L                                 
 000004c5  MAC_H                                  
 000004c4  MAC_L                                  
-00011550  MFRC522_AntennaOn                      
-00010eb2  MFRC522_Anticoll                       
-00010d04  MFRC522_CalulateCRC                    
-000116b4  MFRC522_ClearBitMask                   
-0001123a  MFRC522_Halt                           
-00010924  MFRC522_Init                           
-0001156c  MFRC522_ReadReg                        
-00011164  MFRC522_Request                        
-0001171a  MFRC522_Reset                          
-000116fc  MFRC522_SetBitMask                     
+000105e4  MFRC522_AntennaOn                      
+00010362  MFRC522_Anticoll                       
+000102f4  MFRC522_CalulateCRC                    
+000106bc  MFRC522_ClearBitMask                   
+000104b0  MFRC522_Halt                           
+000101ee  MFRC522_Init                           
+00010600  MFRC522_ReadReg                        
+00010468  MFRC522_Request                        
+000106fe  MFRC522_Reset                          
+000106e0  MFRC522_SetBitMask                     
 00010000  MFRC522_ToCard                         
-000115c0  MFRC522_WriteReg                       
+00010638  MFRC522_WriteReg                       
 000004c0  MPY                                    
 000004ec  MPY32CTL0                              
 000004ed  MPY32CTL0_H                            
@@ -1161,26 +1049,17 @@ address   name
 0000015c  WDTCTL                                 
 0000015d  WDTCTL_H                               
 0000015c  WDTCTL_L                               
-00002592  _CIOBUF_                               
 00004400  __STACK_END                            
 000000a0  __STACK_SIZE                           
-000000a0  __SYSMEM_SIZE                          
-0000455e  __TI_CINIT_Base                        
-0000456e  __TI_CINIT_Limit                       
-0000456e  __TI_CINIT_Warm                        
-0000454c  __TI_Handler_Table_Base                
-00004558  __TI_Handler_Table_Limit               
+00004446  __TI_CINIT_Base                        
+00004456  __TI_CINIT_Limit                       
+00004456  __TI_CINIT_Warm                        
+0000442c  __TI_Handler_Table_Base                
+00004438  __TI_Handler_Table_Limit               
 0000441c  __TI_ISR_TRAP                          
-0001102e  __TI_auto_init_nobinit_nopinit_hold_wdt
-00011338  __TI_cleanup                           
-0000257c  __TI_cleanup_ptr                       
-00010bac  __TI_closefile                         
-00010ac2  __TI_decompress_lzss                   
-000116c6  __TI_decompress_none                   
-00010f16  __TI_doflush                           
-00002580  __TI_dtors_ptr                         
-0000258e  __TI_enable_exit_profile_output        
-0000258c  __TI_ft_end                            
+000103c6  __TI_auto_init_nobinit_nopinit_hold_wdt
+0001027e  __TI_decompress_lzss                   
+000106ce  __TI_decompress_none                   
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -1204,82 +1083,32 @@ address   name
 0000fffa  __TI_int61                             
 0000fffc  __TI_int62                             
 ffffffff  __TI_pprof_out_hndl                    
-00010632  __TI_printfi_minimal                   
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
-000113a4  __TI_readmsg                           
-000026b2  __TI_tmpnams                           
-0001136e  __TI_writemsg                          
-00010a44  __TI_wrt_ok                            
-0001150a  __TI_zero_init_nomemset                
+0001059e  __TI_zero_init_nomemset                
 ffffffff  __c_args__                             
-00011676  __mspabi_divu                          
-000115da  __mspabi_mpyi_f5hw                     
-00011676  __mspabi_remu                          
-000112b8  __mspabi_slll_1                        
-00011294  __mspabi_slll_10                       
-00011290  __mspabi_slll_11                       
-0001128c  __mspabi_slll_12                       
-00011288  __mspabi_slll_13                       
-00011284  __mspabi_slll_14                       
-00011280  __mspabi_slll_15                       
-000112b4  __mspabi_slll_2                        
-000112b0  __mspabi_slll_3                        
-000112ac  __mspabi_slll_4                        
-000112a8  __mspabi_slll_5                        
-000112a4  __mspabi_slll_6                        
-000112a0  __mspabi_slll_7                        
-0001129c  __mspabi_slll_8                        
-00011298  __mspabi_slll_9                        
 00004400  _c_int00_noargs                        
-000024c8  _device                                
-00002400  _ftable                                
-00002584  _lock                                  
-0001174e  _nop                                   
 0000fffe  _reset_vector                          
 00004360  _stack                                 
-00002540  _stream                                
-00002760  _sys_memory                            
-00011750  _system_post_cinit                     
-0001174a  _system_pre_init                       
-00002588  _unlock                                
-00011740  abort                                  
-00010270  aligned_alloc                          
-00010f7a  close                                  
-000110d0  exit                                   
-00011438  finddevice                             
-000109b4  fputc                                  
-00010382  fputs                                  
-00010472  free                                   
-00010e48  fseek                                  
-00010e48  fseeko                                 
-00010fd4  getdevice                              
-00011634  initLEDs                               
-0001168c  initSystem                             
-000114bc  initUART                               
-000112be  lseek                                  
-000112fc  main                                   
-00011732  malloc                                 
-00010270  memalign                               
-000114e4  memccpy                                
-0001164a  memchr                                 
-000116a0  memcpy                                 
-00011660  memset                                 
-00002752  parmbuf                                
-0001111a  printf                                 
-000107e8  processRFID                            
-000109b4  putc                                   
-00011408  remove                                 
-00011726  sendChar                               
-000116d8  sendString                             
-00010554  setvbuf                                
-00011588  strchr                                 
-000115a4  strcmp                                 
-000116ea  strcpy                                 
-0001170c  strlen                                 
-000113d6  strncpy                                
-00011408  unlink                                 
-0001152e  write                                  
+00010714  _system_post_cinit                     
+00010710  _system_pre_init                       
+0001070a  abort                                  
+00004424  authorizedCard1                        
+00004428  authorizedCard2                        
+000104f6  blinkRedLED                            
+000106f0  initButton                             
+0001067e  initLEDs                               
+000105c2  initPWM                                
+00010694  initSystem                             
+00010538  isAuthorizedCard                       
+00010576  main                                   
+000106a8  memcpy                                 
+0001013e  processRFID                            
+00002400  serNum                                 
+00002408  servoDelayTimer                        
+00002406  servoState                             
+0001061c  setServoAngle                          
+0001041a  updateSystem                           
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -1287,7 +1116,6 @@ GLOBAL SYMBOLS: SORTED BY Symbol Address
 address   name                                   
 -------   ----                                   
 000000a0  __STACK_SIZE                           
-000000a0  __SYSMEM_SIZE                          
 00000100  SFRIE1                                 
 00000100  SFRIE1_L                               
 00000101  SFRIE1_H                               
@@ -2018,28 +1846,20 @@ address   name
 000023fd  USBIEPBBAY_7                           
 000023fe  USBIEPBCTY_7                           
 000023ff  USBIEPSIZXY_7                          
-00002400  _ftable                                
-000024c8  _device                                
-00002540  _stream                                
-0000257c  __TI_cleanup_ptr                       
-00002580  __TI_dtors_ptr                         
-00002584  _lock                                  
-00002588  _unlock                                
-0000258c  __TI_ft_end                            
-0000258e  __TI_enable_exit_profile_output        
-00002592  _CIOBUF_                               
-000026b2  __TI_tmpnams                           
-00002752  parmbuf                                
-00002760  _sys_memory                            
+00002400  serNum                                 
+00002406  servoState                             
+00002408  servoDelayTimer                        
 00004360  _stack                                 
 00004400  __STACK_END                            
 00004400  _c_int00_noargs                        
 0000441c  __TI_ISR_TRAP                          
-0000454c  __TI_Handler_Table_Base                
-00004558  __TI_Handler_Table_Limit               
-0000455e  __TI_CINIT_Base                        
-0000456e  __TI_CINIT_Limit                       
-0000456e  __TI_CINIT_Warm                        
+00004424  authorizedCard1                        
+00004428  authorizedCard2                        
+0000442c  __TI_Handler_Table_Base                
+00004438  __TI_Handler_Table_Limit               
+00004446  __TI_CINIT_Base                        
+00004456  __TI_CINIT_Limit                       
+00004456  __TI_CINIT_Warm                        
 0000ffd2  __TI_int41                             
 0000ffd4  __TI_int42                             
 0000ffd6  __TI_int43                             
@@ -2064,97 +1884,39 @@ address   name
 0000fffc  __TI_int62                             
 0000fffe  _reset_vector                          
 00010000  MFRC522_ToCard                         
-00010270  aligned_alloc                          
-00010270  memalign                               
-00010382  fputs                                  
-00010472  free                                   
-00010554  setvbuf                                
-00010632  __TI_printfi_minimal                   
-000107e8  processRFID                            
-0001088a  HOSTlseek                              
-00010924  MFRC522_Init                           
-000109b4  fputc                                  
-000109b4  putc                                   
-00010a44  __TI_wrt_ok                            
-00010ac2  __TI_decompress_lzss                   
-00010b38  HOSTrename                             
-00010bac  __TI_closefile                         
-00010c94  HOSTopen                               
-00010d04  MFRC522_CalulateCRC                    
-00010d72  HOSTwrite                              
-00010dde  HOSTread                               
-00010e48  fseek                                  
-00010e48  fseeko                                 
-00010eb2  MFRC522_Anticoll                       
-00010f16  __TI_doflush                           
-00010f7a  close                                  
-00010fd4  getdevice                              
-0001102e  __TI_auto_init_nobinit_nopinit_hold_wdt
-00011082  HOSTclose                              
-000110d0  exit                                   
-0001111a  printf                                 
-00011164  MFRC522_Request                        
-000111f4  HOSTunlink                             
-0001123a  MFRC522_Halt                           
-00011280  __mspabi_slll_15                       
-00011284  __mspabi_slll_14                       
-00011288  __mspabi_slll_13                       
-0001128c  __mspabi_slll_12                       
-00011290  __mspabi_slll_11                       
-00011294  __mspabi_slll_10                       
-00011298  __mspabi_slll_9                        
-0001129c  __mspabi_slll_8                        
-000112a0  __mspabi_slll_7                        
-000112a4  __mspabi_slll_6                        
-000112a8  __mspabi_slll_5                        
-000112ac  __mspabi_slll_4                        
-000112b0  __mspabi_slll_3                        
-000112b4  __mspabi_slll_2                        
-000112b8  __mspabi_slll_1                        
-000112be  lseek                                  
-000112fc  main                                   
-00011338  __TI_cleanup                           
-0001136e  __TI_writemsg                          
-000113a0  C$$IO$$                                
-000113a4  __TI_readmsg                           
-000113d6  strncpy                                
-00011408  remove                                 
-00011408  unlink                                 
-00011438  finddevice                             
-000114bc  initUART                               
-000114e4  memccpy                                
-0001150a  __TI_zero_init_nomemset                
-0001152e  write                                  
-00011550  MFRC522_AntennaOn                      
-0001156c  MFRC522_ReadReg                        
-00011588  strchr                                 
-000115a4  strcmp                                 
-000115c0  MFRC522_WriteReg                       
-000115da  __mspabi_mpyi_f5hw                     
-00011634  initLEDs                               
-0001164a  memchr                                 
-00011660  memset                                 
-00011676  __mspabi_divu                          
-00011676  __mspabi_remu                          
-0001168c  initSystem                             
-000116a0  memcpy                                 
-000116b4  MFRC522_ClearBitMask                   
-000116c6  __TI_decompress_none                   
-000116d8  sendString                             
-000116ea  strcpy                                 
-000116fc  MFRC522_SetBitMask                     
-0001170c  strlen                                 
-0001171a  MFRC522_Reset                          
-00011726  sendChar                               
-00011732  malloc                                 
-00011740  C$$EXIT                                
-00011740  abort                                  
-0001174a  _system_pre_init                       
-0001174e  _nop                                   
-00011750  _system_post_cinit                     
+0001013e  processRFID                            
+000101ee  MFRC522_Init                           
+0001027e  __TI_decompress_lzss                   
+000102f4  MFRC522_CalulateCRC                    
+00010362  MFRC522_Anticoll                       
+000103c6  __TI_auto_init_nobinit_nopinit_hold_wdt
+0001041a  updateSystem                           
+00010468  MFRC522_Request                        
+000104b0  MFRC522_Halt                           
+000104f6  blinkRedLED                            
+00010538  isAuthorizedCard                       
+00010576  main                                   
+0001059e  __TI_zero_init_nomemset                
+000105c2  initPWM                                
+000105e4  MFRC522_AntennaOn                      
+00010600  MFRC522_ReadReg                        
+0001061c  setServoAngle                          
+00010638  MFRC522_WriteReg                       
+0001067e  initLEDs                               
+00010694  initSystem                             
+000106a8  memcpy                                 
+000106bc  MFRC522_ClearBitMask                   
+000106ce  __TI_decompress_none                   
+000106e0  MFRC522_SetBitMask                     
+000106f0  initButton                             
+000106fe  MFRC522_Reset                          
+0001070a  C$$EXIT                                
+0001070a  abort                                  
+00010710  _system_pre_init                       
+00010714  _system_post_cinit                     
 ffffffff  __TI_pprof_out_hndl                    
 ffffffff  __TI_prof_data_size                    
 ffffffff  __TI_prof_data_start                   
 ffffffff  __c_args__                             
 
-[870 symbols]
+[803 symbols]
